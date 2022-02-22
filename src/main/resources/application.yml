@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.106.10.170:8848
+        username: nacos
+        password: nacos
+    gateway: #让 gateway通过 nacos 实现自动路由转发
+      discovery:
+        locator:
+          enabled: false #true则走默认规则
+      routes:
+        - id: article_service_route
+          uri: lb://article-service
+          predicates:
+            - Path=/**
+          #filters:
+            #- StripPrefix=1
+
+server:
+  port: 9500
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    root: debug
